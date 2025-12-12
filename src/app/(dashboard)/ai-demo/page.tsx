@@ -6,6 +6,7 @@ import StreamingDemo from "./components/StreamingDemo";
 import VercelSdkDemo from "./components/VercelSdkDemo";
 import ServerActionsDemo from "./components/ServerActionsDemo";
 import AgnoDemo from "./components/AgnoDemo";
+import LangChainDemo from "./components/LangChainDemo";
 import MastraChatbot from "./components/MastraChatbot";
 
 /**
@@ -100,9 +101,14 @@ export default async function AIDemoPage() {
           <ServerActionsDemo />
         </Suspense>
 
-        {/* 5. Agno Agent Demo */}
-        <Suspense fallback={<DemoSkeleton title="Agno Agent" />}>
+        {/* 5. Custom Agent Pattern (Educational) */}
+        <Suspense fallback={<DemoSkeleton title="Custom Agent" />}>
           <AgnoDemo />
+        </Suspense>
+
+        {/* 6. LangChain.js (Real Framework) */}
+        <Suspense fallback={<DemoSkeleton title="LangChain.js" />}>
+          <LangChainDemo />
         </Suspense>
       </div>
 
