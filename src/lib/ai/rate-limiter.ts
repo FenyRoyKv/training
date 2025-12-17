@@ -16,8 +16,8 @@ const tokenUsage: Map<string, { used: number; limit: number; resetAt: Date }> = 
 
 // Configuration
 const RATE_LIMIT_CONFIG = {
-  REQUESTS_PER_MINUTE: 3,
-  TOKENS_PER_DAY: 100000,
+  REQUESTS_PER_MINUTE: 10,
+  TOKENS_PER_DAY: 100,
   WINDOW_MS: 60 * 1000, // 1 minute
 };
 

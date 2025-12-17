@@ -69,8 +69,8 @@ export async function POST(request: NextRequest) {
       { role: "user" as const, content: message },
     ];
 
-    // Generate response using the agent
-    const response = await agent.generate(messages);
+    // Generate response using the agent (using generateLegacy for AI SDK v4 models)
+    const response = await agent.generateLegacy(messages);
 
     return NextResponse.json(
       {
@@ -122,7 +122,7 @@ export async function GET(request: NextRequest) {
         prompt = `Give me a quick overview of my tasks. User ID: ${userId}`;
     }
 
-    const response = await agent.generate([
+    const response = await agent.generateLegacy([
       { role: "user" as const, content: prompt },
     ]);
 

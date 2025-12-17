@@ -185,16 +185,29 @@ export const updateTodoStatusTool = createTool({
   },
 });
 
-// Tool to delete a todo
+// Tool to delete a todo (with human-in-the-loop confirmation)
 export const deleteTodoTool = createTool({
   id: "delete-todo",
-  description: "Deletes a todo item.",
+  description:
+    "Deletes a todo item. IMPORTANT: This is a destructive action that requires confirmation. " +
+    "First call with 'confirmed: false' to get todo details, then call again with 'confirmed: true' " +
+    "only after the user explicitly confirms they want to delete it.",
   inputSchema: z.object({
     userId: z.string().describe("The user ID"),
     todoId: z.string().describe("The ID of the todo to delete"),
+    confirmed: z
+      .boolean()
+      .optional()
+      .describe(
+        "Set to true only after the user has explicitly confirmed deletion. " +
+          "Do not set this on the first call - wait for user confirmation."
+      ),
   }),
   execute: async ({ context }) => {
-    const { userId, todoId } = context;
+    const { userId, todoId, confirmed } = context;
+
+
+    console.log('deleteTodoTool', userId, todoId, confirmed, context);
 
     const existing = await db.todo.findFirst({
       where: { id: todoId, userId },
@@ -204,11 +217,31 @@ export const deleteTodoTool = createTool({
       return { success: false, error: "Todo not found or not owned by user" };
     }
 
+    // Human-in-the-loop: require explicit confirmation before deletion
+    if (!confirmed) {
+      return {
+        success: false,
+        requiresConfirmation: true,
+        message: `⚠️ Are you sure you want to delete this todo?`,
+        todoToDelete: {
+          id: existing.id,
+          title: existing.title,
+          description: existing.description,
+          priority: existing.priority,
+          completed: existing.completed,
+          createdAt: existing.createdAt.toISOString(),
+        },
+        instruction:
+          "Please confirm you want to delete this todo. This action cannot be undone.",
+      };
+    }
+
+    // User confirmed - proceed with deletion
     await db.todo.delete({ where: { id: todoId } });
 
     return {
       success: true,
-      message: `Deleted todo: "${existing.title}"`,
+      message: `✅ Deleted todo: "${existing.title}"`,
     };
   },
 });

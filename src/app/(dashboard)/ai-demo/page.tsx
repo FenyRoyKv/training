@@ -51,6 +51,27 @@ export default async function AIDemoPage() {
         </Link>
       </div>
 
+      {/* RAG Demo Link */}
+      <Link
+        href="/ai-demo/rag"
+        className="block bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-xl p-4 hover:from-blue-600/30 hover:to-purple-600/30 transition group"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+              <span className="text-xl">📚</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-white">RAG - Retrieval Augmented Generation</h3>
+              <p className="text-sm text-slate-400">LangChain vs Mastra implementations</p>
+            </div>
+          </div>
+          <svg className="w-5 h-5 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </Link>
+
       {/* Architecture Note */}
       <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
         <div className="flex items-start gap-3">
