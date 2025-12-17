@@ -101,52 +101,43 @@ export async function updateTodo(
 }
 
 // Toggle todo completion status
-export async function toggleTodoComplete(todoId: string) {
-  try {
-    const userId = await getCurrentUserId();
+export async function toggleTodoComplete(todoId: string): Promise<void> {
+  const userId = await getCurrentUserId();
 
-    const todo = await db.todo.findFirst({
-      where: { id: todoId, userId },
-    });
+  const todo = await db.todo.findFirst({
+    where: { id: todoId, userId },
+  });
 
-    if (!todo) {
-      return { error: "Todo not found" };
-    }
-
-    await db.todo.update({
-      where: { id: todoId },
-      data: { completed: !todo.completed },
-    });
-
-    revalidatePath("/dashboard");
-    revalidatePath(`/todo/${todoId}`);
-  } catch {
-    return { error: "Failed to update todo" };
+  if (!todo) {
+    throw new Error("Todo not found");
   }
+
+  await db.todo.update({
+    where: { id: todoId },
+    data: { completed: !todo.completed },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath(`/todo/${todoId}`);
 }
 
 // Delete a todo
-export async function deleteTodo(todoId: string) {
-  try {
-    const userId = await getCurrentUserId();
+export async function deleteTodo(todoId: string): Promise<void> {
+  const userId = await getCurrentUserId();
 
-    const todo = await db.todo.findFirst({
-      where: { id: todoId, userId },
-    });
+  const todo = await db.todo.findFirst({
+    where: { id: todoId, userId },
+  });
 
-    if (!todo) {
-      return { error: "Todo not found" };
-    }
-
-    await db.todo.delete({
-      where: { id: todoId },
-    });
-
-    revalidatePath("/dashboard");
-  } catch {
-    return { error: "Failed to delete todo" };
+  if (!todo) {
+    throw new Error("Todo not found");
   }
 
+  await db.todo.delete({
+    where: { id: todoId },
+  });
+
+  revalidatePath("/dashboard");
   redirect("/dashboard");
 }
 
